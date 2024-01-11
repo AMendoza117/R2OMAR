@@ -1,0 +1,62 @@
+.main-content {
+    padding: 20px;
+  }
+
+  .main-content .card {
+    margin-bottom: 20px;
+  }
+
+  .main-content .card-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .main-content .card-header h3 {
+    margin: 0;
+  }
+
+  .main-content .card-body {
+    padding: 20px;
+  }
+
+
+
+/*------------------------------------------------------------------*/
+#inputSubAct{
+  width: 500px;
+
+}
+
+#selectEnc{
+  width: 250px;
+}
+
+#inputEmail4{
+  width: 300px;
+}
+
+#Actividada{
+  width: 500px;
+}
+
+#fechaI{
+  width: 150px;
+  margin-left: 10px;
+}
+
+#fechaF{
+  width: 150px;
+
+  margin-left: 10px;
+}
+
+#etiquetaF{
+  margin-left: 100px;   
+}
+
+#btnGuardar{
+  margin-left: 500px;
+  margin-top: 15px;
+}
