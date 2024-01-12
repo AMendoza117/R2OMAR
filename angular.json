@@ -122,6 +122,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "gestionClinica"
+    }
+  },
+  "defaultProject": "gestionClinica",
+  "cli": {
+    "analytics": "6a379a07-392d-4085-8e92-d8d94439ef34"
+  }
 }
