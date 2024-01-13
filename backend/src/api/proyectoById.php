@@ -5,6 +5,7 @@ header("Content-Type: application/json");
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $idProject = $request->idProject;
+$idProject = $_GET['idProject'];
 
 // Array para almacenar los datos relacionados con el idProject
 $projectData = [];
@@ -60,8 +61,6 @@ if ($resultEmployee) {
   echo json_encode(['error' => 'Error al cargar datos del empleado']);
   exit;
 }
-
-// Puedes continuar este patrón para otras tablas según sea necesario
 
 // Devolver todos los datos en formato JSON
 echo json_encode($projectData);

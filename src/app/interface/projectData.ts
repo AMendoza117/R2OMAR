@@ -4,6 +4,7 @@ import { Project } from "./project.model";
 import { Responsible } from "./responsible.model";
 
 export interface ProjectData {
+    activities: any;
     projects: Project[];
     responsible: Responsible;
     activity: Activity[];

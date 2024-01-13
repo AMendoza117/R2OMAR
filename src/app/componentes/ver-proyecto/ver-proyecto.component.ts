@@ -1,11 +1,11 @@
 import { Employee } from './../../interface/employee.model';
-// ver-proyecto.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
-import { Documento } from 'src/app/Models/Documento.model';
 import { Responsible } from 'src/app/interface/responsible.model';
 import { ProjectData } from 'src/app/interface/projectData';
+import { Item } from 'src/app/interface/item.model';
+import { Activity } from 'src/app/interface/activity.model';
 
 @Component({
   selector: 'app-ver-proyecto',
@@ -13,128 +13,33 @@ import { ProjectData } from 'src/app/interface/projectData';
   styleUrls: ['./ver-proyecto.component.css']
 })
 export class VerProyectoComponent implements OnInit {
-  verDocumento: Documento;
-  idDocumento: number;
-  projectData: ProjectData[];
+  projectData: ProjectData;
   responsibles: Responsible[];
-  employee: Employee[];
+  employees: Employee[];
+  item: Item[];
   idProject: number;
+  selectedEmployee: number; 
+  newActivity: any = {
+    title: '',
+    encargadoId: null,
+    recursoId: null,
+    inicio: '',
+    fin: ''
+  };
+  activities: Activity;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
-
-  }
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      this.idDocumento = +params.get('id'); 
       this.idProject = +params.get('id'); 
-      if (!isNaN(this.idDocumento)) {
-        this.loadPDF(this.idDocumento);
-      }
       if (!isNaN(this.idProject)) {
-        this.loadPDF(this.idProject);
+        this.loadProject(this.idProject);
       }
     });
-    console.log("Datos de PDF: ", this.verDocumento);
-    this.enRevission(this.idDocumento);
+
     this.loadResponsables();
-    this.loadEmployee(this.idProject);
-    this.loadProject(this.idProject);
-
-  }
-
-
-  loadPDF(idDocumento: number) {
-    this.apiService.getPDF(idDocumento).subscribe(
-      (verDocumento: Documento) => {
-        this.verDocumento = verDocumento;
-        console.log("Datos del pdfaa: ", this.verDocumento);
-      },
-      (error) => {
-        console.error('Error al cargar PDF: ', error)
-      }
-    )
-  }
-
-  loadPDF2(idProject: number) {
-    this.apiService.getPDF2(idProject).subscribe(
-      (verDocumento: Documento) => {
-        this.verDocumento = verDocumento;
-        console.log("Datos del pdfaa: ", this.verDocumento);
-      },
-      (error) => {
-        console.error('Error al cargar PDF: ', error)
-      }
-    )
-  }
-
-  enRevission(idDocumento: number): void {
-    this.apiService.enRevision(idDocumento).subscribe(
-      (response) => {
-        this.loadPDF(this.idDocumento);
-      },
-      (error) => {
-        console.error('Error al cambiar el estado', error);
-      }
-    )
-  }
-
-  aceptado(): void {
-    const idDocumento = this.idDocumento;
-    this.apiService.aceptado(idDocumento).subscribe(
-      (response) => {
-        if (response && response.success) {
-          // Enviar el correo electrónico después de agregar el stakeholder
-          this.apiService.enviarCorreo(this.verDocumento).subscribe(
-            (correoResponse) => {
-              if (correoResponse && correoResponse.success) {
-                console.log('Correo electrónico enviado con éxito.');
-              } else {
-                console.error('Error al enviar el correo electrónico.');
-              }
-            },
-            (correoError) => {
-              console.error('Error en la solicitud para enviar el correo electrónico: ', correoError);
-            }
-          );
-          this.router.navigate(['/dashboard']);
-        } else {
-          console.error('Error al agregar stakeholder.');
-        }
-      },
-      (error) => {
-        console.error('Error al cambiar el estado', error);
-      }
-    )
-  }
-
-  rechazado(): void {
-    const idDocumento = this.idDocumento;
-    this.apiService.rechazado(idDocumento).subscribe(
-      (response) => {
-        if (response && response.success) {
-          // Enviar el correo electrónico después de agregar el stakeholder
-          this.apiService.enviarCorreo2(this.verDocumento).subscribe(
-            (correoResponse) => {
-              if (correoResponse && correoResponse.success) {
-                console.log('Correo electrónico enviado con éxito.');
-              } else {
-                console.error('Error al enviar el correo electrónico.');
-              }
-            },
-            (correoError) => {
-              console.error('Error en la solicitud para enviar el correo electrónico: ', correoError);
-            }
-          );
-          this.router.navigate(['/dashboard']);
-        } else {
-          console.error('Error al agregar stakeholder.');
-        }
-      },
-      (error) => {
-        console.error('Error al cambiar el estado', error);
-      }
-    )
+    this.loadItem();
   }
 
   loadResponsables() {
@@ -148,10 +53,27 @@ export class VerProyectoComponent implements OnInit {
     );
   }
 
-  loadEmployee(idProject) {
-    this.apiService.loadEmploye(idProject).subscribe(
-      (employee: Employee[]) => {
-        this.employee = employee;
+  loadEmployees() {
+    this.employees = this.projectData.employee;
+  }
+
+  loadProject(idProject: number){
+    this.apiService.getProjectData(idProject).subscribe(
+      (data: ProjectData) => {
+        this.projectData = data;
+        this.loadEmployees(); 
+        console.log("Datos del loadProject", this.projectData);
+      },
+      (error) => {
+        console.error('Error al cargar datos del proyecto:', error);
+      }
+    );
+  }
+
+  loadItem() {
+    this.apiService.getItem().subscribe(
+      (item: Item[]) => {
+        this.item = item;
       },
       (error) => {
         console.error('Error al cargar responsables:', error);
@@ -159,17 +81,39 @@ export class VerProyectoComponent implements OnInit {
     );
   }
 
-  loadProject(idProject){
-    this.apiService.getProjectData(this.idProject).subscribe(
-      (data: any) => {
-        this.projectData = data;
-      },
-      (error) => {
-        console.error('Error al cargar datos del proyecto:', error);
+  addNewActivity() {
+    // Validar que los campos requeridos estén completos antes de agregar la actividad
+    if (!this.newActivity.title || !this.newActivity.encargadoId || !this.newActivity.recursoId || !this.newActivity.inicio || !this.newActivity.fin) {
+      console.log('Por favor, complete todos los campos antes de guardar.');
+      return;
+    }
+
+    // Agregar la nueva actividad al arreglo de actividades
+    this.projectData.activities.push({
+      title: this.newActivity.title,
+      encargadoId: this.newActivity.encargadoId,
+      recursoId: this.newActivity.recursoId,
+      inicio: this.newActivity.inicio,
+      fin: this.newActivity.fin
+      // Añade otras propiedades según sea necesario
+    });
+
+    // Resetear el formulario
+    this.newActivity = {
+      title: '',
+      encargadoId: null,
+      recursoId: null,
+      inicio: '',
+      fin: ''
+    };
+
+    // Guardar la nueva actividad en el backend utilizando tu servicio de API
+    this.apiService.addActivity(this.newActivity).subscribe(response => {
+      if (response.success) {
+        console.log('¡Actividad añadida exitosamente!');
+      } else {
+        console.error('Error al añadir actividad:', response.error);
       }
-    );
+    });
   }
 }
-
-
-
