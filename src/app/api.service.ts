@@ -8,6 +8,7 @@ import { Documento } from './Models/Documento.model';
 import { Project } from './interface/project.model';
 import { Responsible } from './interface/responsible.model';
 import { Employee } from './interface/employee.model';
+import { ProjectData } from './interface/projectData';
 
 @Injectable({
   providedIn: 'root',
@@ -66,12 +67,7 @@ loadResponsables(): Observable<Responsible[]> {
 
     return this.http.get<Responsible[]>(url, { headers });
   }
-loadEmploye(idProyecto: number): Observable<Employee[]> {
-    const url = `${this.apiUrl}/api/loadEmployee.php`;
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-    return this.http.get<Employee[]>(url, { headers });
-  }
+  
 
   enRevision(idDocumento: number): Observable<any> {
     const url = `${this.apiUrl}/api/enRevisionC.php`;
@@ -109,10 +105,10 @@ loadEmploye(idProyecto: number): Observable<Employee[]> {
     return this.http.post(url, JSON.stringify(documento), { headers, withCredentials: true });
   }
 
-  getProjectData(idProject: number): Observable<any> {
+  getProjectData(idProject: number): Observable<ProjectData> {
     const url = `${this.apiUrl}/api/proyectoById.php?idProject=${idProject}`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get<any>(url, { headers });
+    return this.http.get<ProjectData>(url, { headers });
   }
 
 }

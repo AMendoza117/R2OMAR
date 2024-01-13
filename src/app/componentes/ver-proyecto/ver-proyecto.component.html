@@ -1,25 +1,25 @@
 <form class="row gy-2 gx-3 align-items-center">
-    <div class="col-auto">
-        <label for="inputEmail4" class="form-label">Actividad</label>
-        <input type="email" class="form-control" id="Actividada">
-    </div>
-    <div class="col-auto">
-        <label for="inputCity" class="form-label">Encargado:</label>
-        <select id="inputState" class="form-select" id="selectEnc">
-          <option selected>Choose...</option>
-          <option *ngFor="let responsable of responsibles" [ngValue]="responsable.idResponsible">
-            {{ responsable.nameRespo }}
-          </option>
-        </select>
-      </div>
-    
-    <div>
-        <label for="">Fecha Incio</label>
-        <input type="date" id="fechaI">
-        <label for="" id="etiquetaF">Fecha final</label>
-        <input type="date" id="fechaF">
-    </div>
-    <div class="col-12">
-        <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>
-    </div>
+  <div class="col-auto">
+    <label for="inputEmail4" class="form-label">Actividad</label>
+    <input type="email" class="form-control" id="Actividada">
+  </div>
+  <div class="col-auto">
+    <label for="inputEmployee" class="form-label">Encargado:</label>
+    <select id="inputEmployee" class="form-select" [(ngModel)]="selectedEmployee" name="selectedEmployee">
+      <option value="" disabled selected>Seleccione un empleado</option>
+      <option *ngFor="let employee of employees" [value]="employee.idEmplo">
+        {{ employee.nameEmplo }}
+      </option>
+    </select>
+  </div>
+
+  <div>
+    <label for="">Fecha Incio</label>
+    <input type="date" id="fechaI">
+    <label for="" id="etiquetaF">Fecha final</label>
+    <input type="date" id="fechaF">
+  </div>
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>
+  </div>
 </form>
