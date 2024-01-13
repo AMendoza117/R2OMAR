@@ -8,6 +8,8 @@ import { HeaderComponent } from './componentes/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './componentes/dashboard/dashboard.component';
 import { VerProyectoComponent } from './componentes/ver-proyecto/ver-proyecto.component';
+import { ActividadComponent } from './componentes/actividad/actividad.component';
+import { SubactComponent } from './componentes/subact/subact.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +17,8 @@ import { VerProyectoComponent } from './componentes/ver-proyecto/ver-proyecto.co
     HeaderComponent,
     DashboardComponent,
     VerProyectoComponent,
+    ActividadComponent,
+    SubactComponent,
     
   ],
   imports: [
