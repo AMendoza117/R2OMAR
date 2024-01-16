@@ -43,7 +43,7 @@ export class ApiService {
 
     return this.http.get<Documento>(url, { headers });
   }
-
+  
   loadResponsables(): Observable<Responsible[]> {
     const url = `${this.apiUrl}/api/loadResponsables.php`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

@@ -40,13 +40,25 @@
       <div class="col-md-4">
         <div class="card card-body">
           <div class="form-group">
+<<<<<<< Updated upstream
             <label for="nameSub" class="form-label">Nombre Subactividad</label>
             <input type="text" id="nameSub" class="form-control" placeholder="Nombre subactividad" [(ngModel)]="nuevaSubactividad.nameSub" required>
+=======
+            <label for="title" class="form-label">Actividad</label>
+            <input type="text" name="title" class="form-control" placeholder="titulo actividad"
+              [(ngModel)]="nuevaActividad.nameAct" autofocus required>
+>>>>>>> Stashed changes
           </div>
 
           <div class="form-group">
+<<<<<<< Updated upstream
             <label for="nameRes" class="form-label">Encargado</label>
             <select id="nameRes" name="encargado" class="form-select" [(ngModel)]="nuevaSubactividad.nameRes" required>
+=======
+            <label for="encargado" class="form-label">Encargado</label>
+            <select id="encargado" name="encargado" class="form-select" [(ngModel)]="nuevaActividad.responsible"
+              required>
+>>>>>>> Stashed changes
               <option *ngFor="let employee of employees" [value]="employee.idEmplo">
                 {{ employee.nameEmplo }}
               </option>
@@ -61,6 +73,7 @@
               </option>
             </select>
           </div>
+<<<<<<< Updated upstream
           
           <button type="button" class="btn btn-outline-success" (click)="agregarSubactividad()">Agregar Subactividad</button>
         </div>
@@ -112,3 +125,41 @@
       </div>
     </div>
   </div>
+=======
+          <div class="form-group">
+            <label for="inicio" class="form-label">Inicio</label>
+            <input type="date" id="inicio" name="inicio" [(ngModel)]="nuevaActividad.initialDate" required>
+          </div>
+          <div class="form-group">
+            <label for="fin" class="form-label">Final</label>
+            <input type="date" id="fin" name="fin" [(ngModel)]="nuevaActividad.finisDate" required>
+          </div>
+          <button type="submit" class="btn btn-outline-success"
+            style="margin-left: 100px; margin-top: 5px;">Guardar</button>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Actividad</th>
+            <th scope="col">Encargado</th>
+            <th scope="col">Inicio</th>
+            <th scope="col">Fin</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr *ngFor="let activity of projectData.activity">
+            <td>{{ activity.nameAct }}</td>
+            <td>{{activity.responsible}}</td>
+            <td>{{ activity.initialDate | date:'dd-MM-yyyy' }}</td>
+            <td>{{ activity.finisDate | date:'dd-MM-yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+>>>>>>> Stashed changes

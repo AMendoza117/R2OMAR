@@ -8,6 +8,7 @@ import { Activity } from 'src/app/interface/activity.model';
 import { Employee } from 'src/app/interface/employee.model';
 import { Subactivity } from 'src/app/interface/subactivity.model';
 
+
 @Component({
   selector: 'app-ver-proyecto',
   templateUrl: './ver-proyecto.component.html',
@@ -15,15 +16,21 @@ import { Subactivity } from 'src/app/interface/subactivity.model';
 })
 export class VerProyectoComponent implements OnInit {
   projectData: ProjectData;
+  projectD: ProjectData[];
   responsibles: Responsible[];
   employees: Employee[];
   activitys: Activity[];
   item: Item[];
   idProject: number;
   selectedEmployee: number; 
+<<<<<<< Updated upstream
 
   nuevaActividad: Activity = {
     idAcitvity: null,
+=======
+   nuevaActividad: Activity = {
+    idActivity: null,
+>>>>>>> Stashed changes
     nameAct: '',
     initialDate: '',
     finisDate: '',
@@ -35,7 +42,7 @@ export class VerProyectoComponent implements OnInit {
   constructor(private route: ActivatedRoute, private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
+      this.route.paramMap.subscribe((params) => {
       this.idProject = +params.get('id'); 
       if (!isNaN(this.idProject)) {
         this.loadProject(this.idProject);
@@ -44,6 +51,7 @@ export class VerProyectoComponent implements OnInit {
 
     this.loadResponsables();
     this.loadItem();
+   
   }
 
   loadResponsables() {
@@ -71,12 +79,19 @@ export class VerProyectoComponent implements OnInit {
     console.log("datos de activity: ",this.activitys);
   }
 
+ 
+
   loadProject(idProject: number){
     this.apiService.getProjectData(idProject).subscribe(
       (data: ProjectData) => {
         this.projectData = data;
+<<<<<<< Updated upstream
         this.loadEmployees(); 
         this.loadActivity();
+=======
+        this.loadEmployees();
+        this.loadActivities(idProject); // Agregar esta línea para cargar las actividades
+>>>>>>> Stashed changes
         console.log("Datos del loadProject", this.projectData);
         
       },
@@ -85,6 +100,22 @@ export class VerProyectoComponent implements OnInit {
       }
     );
   }
+  
+  loadActivities(idProject: number) {
+    this.apiService.getProjectData(idProject).subscribe(
+      (projectData: ProjectData) => {
+        this.projectData = projectData;
+        console.log('Datos del proyecto cargados correctamente:', projectData);
+        // Otros pasos que puedas necesitar
+      },
+      (error) => {
+        console.error('Error al cargar datos del proyecto:', error);
+      }
+    );
+  }
+  
+  
+  
 
   loadItem() {
     this.apiService.getItem().subscribe(
@@ -127,6 +158,7 @@ export class VerProyectoComponent implements OnInit {
       }
     );
   }
+<<<<<<< Updated upstream
   
   nuevaSubactividad: Subactivity = {
     idSubAct: null,
@@ -166,4 +198,7 @@ export class VerProyectoComponent implements OnInit {
     );
   }
     
+=======
+     
+>>>>>>> Stashed changes
 }
