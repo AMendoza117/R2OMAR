@@ -17,10 +17,10 @@ require_once(__DIR__ . "/../lib/PHPMailer/src/Exception.php");
 require_once(__DIR__ . "/../lib/PHPMailer/src/SMTP.php");
 
 $to = $projectData['responsible']['email'];
-$subject = "Estado de su documento";
-$message = "Hola " . $request->gmailPropietario . ",\n\nTu documento ha sido Aceptado. Detalles del proyecto:\n\n";
-$message .= "Nombre del proyecto: " . $projectData['projects']['projectName'] . "\n";
-$message .= "Responsable: " . $projectData['responsible']['responsibleName'] . "\n";
+$subject = "Actualizacion de proyecto";
+$message = "Hola " . $request->gmailPropietario . ",\n\nEl proyecto ha sido actualizado. Detalles del proyecto:\n\n";
+$message .= "Nombre del proyecto: " . $projectData['projects']['nameProject'] . "\n";
+$message .= "Responsable: " . $projectData['responsible']['nameRespo'] . "\n";
 $message .= "Actividades:\n";
 
 foreach ($projectData['activity'] as $activity) {

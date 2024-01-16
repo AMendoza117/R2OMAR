@@ -60,13 +60,17 @@ export class ApiService {
     return this.http.post(url, JSON.stringify(documento), { headers, withCredentials: true });
   }
 
-  enviarCorreo2(documento: Documento): Observable<any> {
+  enviarCorreo2(idProyecto: number): Observable<any> {
     const url = `${this.apiUrl}/api/enviarEmail2.php`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
 
-    return this.http.post(url, JSON.stringify(documento), { headers, withCredentials: true });
+    const data = {
+      idProyecto: idProyecto
+    };
+
+    return this.http.post(url, data, { headers });
   }
 
   getProjectData(idProject: number): Observable<ProjectData> {
