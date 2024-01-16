@@ -7,10 +7,15 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, Access
 
 //PRODUCCION
 
-define('DB_HOST', 'bowrpzwozxfm640l38z3-mysql.services.clever-cloud.com'); 
+/*define('DB_HOST', 'bowrpzwozxfm640l38z3-mysql.services.clever-cloud.com'); 
 define('DB_USER', 'uqrmzwjbqssh0kdo');
 define('DB_PASS', 'L0YXbWNRdBO1CeryCWt8');
-define('DB_NAME', 'bowrpzwozxfm640l38z3');
+define('DB_NAME', 'bowrpzwozxfm640l38z3');*/
+
+define('DB_HOST', 'bv90h5h7v4cjmieyv9po-mysql.services.clever-cloud.com'); 
+define('DB_USER', 'umqgctdf481rbiij');
+define('DB_PASS', 'C9Xz70ovvnR8aXF9FFxD');
+define('DB_NAME', 'bv90h5h7v4cjmieyv9po');
 
 
 
