@@ -1,5 +1,5 @@
 export interface Activity {
-    idActivity: number;
+  idAcitvity: number;
     nameAct: string;
     initialDate: string;
     finisDate: string;

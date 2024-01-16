@@ -6,6 +6,7 @@ import { ProjectData } from 'src/app/interface/projectData';
 import { Item } from 'src/app/interface/item.model';
 import { Activity } from 'src/app/interface/activity.model';
 import { Employee } from 'src/app/interface/employee.model';
+import { Subactivity } from 'src/app/interface/subactivity.model';
 
 @Component({
   selector: 'app-ver-proyecto',
@@ -16,12 +17,13 @@ export class VerProyectoComponent implements OnInit {
   projectData: ProjectData;
   responsibles: Responsible[];
   employees: Employee[];
+  activitys: Activity[];
   item: Item[];
   idProject: number;
   selectedEmployee: number; 
 
   nuevaActividad: Activity = {
-    idActivity: null,
+    idAcitvity: null,
     nameAct: '',
     initialDate: '',
     finisDate: '',
@@ -59,6 +61,14 @@ export class VerProyectoComponent implements OnInit {
     if (this.projectData && this.projectData.employee) {
       this.employees = this.projectData.employee;
     }
+    console.log("datos de empleados", this.employees)
+  }
+
+  loadActivity() {
+    if (this.projectData && this.projectData.activity) {
+      this.activitys = this.projectData.activity;
+    }
+    console.log("datos de activity: ",this.activitys);
   }
 
   loadProject(idProject: number){
@@ -66,7 +76,9 @@ export class VerProyectoComponent implements OnInit {
       (data: ProjectData) => {
         this.projectData = data;
         this.loadEmployees(); 
+        this.loadActivity();
         console.log("Datos del loadProject", this.projectData);
+        
       },
       (error) => {
         console.error('Error al cargar datos del proyecto:', error);
@@ -93,7 +105,7 @@ export class VerProyectoComponent implements OnInit {
       (response) => {
         if (response && response.success) {
           // Enviar el correo electrónico después de agregar el stakeholder
-        /*  this.apiService.enviarCorreo().subscribe(
+         this.apiService.enviarCorreo2(idProyecto).subscribe(
             (correoResponse) => {
               if (correoResponse && correoResponse.success) {
                 console.log('Correo electrónico enviado con éxito.');
@@ -104,7 +116,7 @@ export class VerProyectoComponent implements OnInit {
             (correoError) => {
               console.error('Error en la solicitud para enviar el correo electrónico: ', correoError);
             }
-          );*/
+          );
           this.loadProject(this.idProject);
         } else {
           console.error('Error al agregar stakeholder.');
@@ -116,5 +128,42 @@ export class VerProyectoComponent implements OnInit {
     );
   }
   
+  nuevaSubactividad: Subactivity = {
+    idSubAct: null,
+    nameSub: '',
+    nameRes: null,
+    idAct: null,
+  };
+
+  agregarSubactividad(): void {
+    const idProyecto = this.idProject;
+    // Agregar la nueva subactividad a la actividad
+    this.apiService.addSubactivity(this.nuevaSubactividad).subscribe(
+      (response) => {
+        if (response && response.success) {
+          console.log('Subactividad añadida exitosamente!');
+          this.apiService.enviarCorreo2(idProyecto).subscribe(
+            (correoResponse) => {
+              if (correoResponse && correoResponse.success) {
+                console.log('Correo electrónico enviado con éxito.');
+              } else {
+                console.error('Error al enviar el correo electrónico.');
+              }
+            },
+            (correoError) => {
+              console.error('Error en la solicitud para enviar el correo electrónico: ', correoError);
+            }
+          );
+          // Actualizar la lista de actividades después de agregar la subactividad
+          this.loadProject(this.idProject);
+        } else {
+          console.error('Error al añadir subactividad.');
+        }
+      },
+      (error) => {
+        console.error('Error en la solicitud para añadir subactividad: ', error);
+      }
+    );
+  }
     
 }
