@@ -1,13 +1,11 @@
+import { Employee } from './../../interface/employee.model';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
 import { Responsible } from 'src/app/interface/responsible.model';
 import { ProjectData } from 'src/app/interface/projectData';
 import { Item } from 'src/app/interface/item.model';
 import { Activity } from 'src/app/interface/activity.model';
-import { Employee } from 'src/app/interface/employee.model';
-import { Subactivity } from 'src/app/interface/subactivity.model';
-
 
 @Component({
   selector: 'app-ver-proyecto',
@@ -16,33 +14,24 @@ import { Subactivity } from 'src/app/interface/subactivity.model';
 })
 export class VerProyectoComponent implements OnInit {
   projectData: ProjectData;
-  projectD: ProjectData[];
   responsibles: Responsible[];
   employees: Employee[];
-  activitys: Activity[];
   item: Item[];
   idProject: number;
   selectedEmployee: number; 
-<<<<<<< Updated upstream
-
-  nuevaActividad: Activity = {
-    idAcitvity: null,
-=======
-   nuevaActividad: Activity = {
-    idActivity: null,
->>>>>>> Stashed changes
-    nameAct: '',
-    initialDate: '',
-    finisDate: '',
-    responsible: null,
-    idProject: null,
-    item: null
+  nuevaActividad: any = {
+    title: '',
+    encargadoId: null,
+    recursoId: null,
+    inicio: '',
+    fin: ''
   };
+  activities: Activity;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService) { }
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) { }
 
   ngOnInit(): void {
-      this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.subscribe((params) => {
       this.idProject = +params.get('id'); 
       if (!isNaN(this.idProject)) {
         this.loadProject(this.idProject);
@@ -51,7 +40,6 @@ export class VerProyectoComponent implements OnInit {
 
     this.loadResponsables();
     this.loadItem();
-   
   }
 
   loadResponsables() {
@@ -65,57 +53,30 @@ export class VerProyectoComponent implements OnInit {
     );
   }
 
+  /*loadEmployees() {
+    this.employees = this.projectData.employee;
+  }*/
   loadEmployees() {
     if (this.projectData && this.projectData.employee) {
       this.employees = this.projectData.employee;
+    } else {
+      this.employees = [];
     }
-    console.log("datos de empleados", this.employees)
   }
-
-  loadActivity() {
-    if (this.projectData && this.projectData.activity) {
-      this.activitys = this.projectData.activity;
-    }
-    console.log("datos de activity: ",this.activitys);
-  }
-
- 
+  
 
   loadProject(idProject: number){
     this.apiService.getProjectData(idProject).subscribe(
       (data: ProjectData) => {
         this.projectData = data;
-<<<<<<< Updated upstream
         this.loadEmployees(); 
-        this.loadActivity();
-=======
-        this.loadEmployees();
-        this.loadActivities(idProject); // Agregar esta línea para cargar las actividades
->>>>>>> Stashed changes
         console.log("Datos del loadProject", this.projectData);
-        
       },
       (error) => {
         console.error('Error al cargar datos del proyecto:', error);
       }
     );
   }
-  
-  loadActivities(idProject: number) {
-    this.apiService.getProjectData(idProject).subscribe(
-      (projectData: ProjectData) => {
-        this.projectData = projectData;
-        console.log('Datos del proyecto cargados correctamente:', projectData);
-        // Otros pasos que puedas necesitar
-      },
-      (error) => {
-        console.error('Error al cargar datos del proyecto:', error);
-      }
-    );
-  }
-  
-  
-  
 
   loadItem() {
     this.apiService.getItem().subscribe(
@@ -129,76 +90,82 @@ export class VerProyectoComponent implements OnInit {
   }
 
   agregarActividad() {
-    // Obtener el ID del proyecto desde la ruta
-    const idProyecto = this.idProject;
-    // Agregar el nuevo stakeholder al proyecto
-    this.apiService.addActivity(idProyecto, this.nuevaActividad).subscribe(
-      (response) => {
-        if (response && response.success) {
-          // Enviar el correo electrónico después de agregar el stakeholder
-         this.apiService.enviarCorreo2(idProyecto).subscribe(
-            (correoResponse) => {
-              if (correoResponse && correoResponse.success) {
-                console.log('Correo electrónico enviado con éxito.');
-              } else {
-                console.error('Error al enviar el correo electrónico.');
-              }
-            },
-            (correoError) => {
-              console.error('Error en la solicitud para enviar el correo electrónico: ', correoError);
-            }
-          );
-          this.loadProject(this.idProject);
-        } else {
-          console.error('Error al agregar stakeholder.');
-        }
-      },
-      (error) => {
-        console.error('Error en la solicitud para agregar stakeholder: ', error);
-      }
-    );
-  }
-<<<<<<< Updated upstream
+    // Validar que los campos requeridos estén completos antes de agregar la actividad
+    if (!this.nuevaActividad.title || !this.nuevaActividad.encargadoId || !this.nuevaActividad.recursoId || !this.nuevaActividad.inicio || !this.nuevaActividad.fin) {
+      console.log('Por favor, complete todos los campos antes de guardar.');
+      return;
+    }
   
-  nuevaSubactividad: Subactivity = {
-    idSubAct: null,
-    nameSub: '',
-    nameRes: null,
-    idAct: null,
-  };
-
-  agregarSubactividad(): void {
-    const idProyecto = this.idProject;
-    // Agregar la nueva subactividad a la actividad
-    this.apiService.addSubactivity(this.nuevaSubactividad).subscribe(
-      (response) => {
-        if (response && response.success) {
-          console.log('Subactividad añadida exitosamente!');
-          this.apiService.enviarCorreo2(idProyecto).subscribe(
-            (correoResponse) => {
-              if (correoResponse && correoResponse.success) {
-                console.log('Correo electrónico enviado con éxito.');
-              } else {
-                console.error('Error al enviar el correo electrónico.');
-              }
-            },
-            (correoError) => {
-              console.error('Error en la solicitud para enviar el correo electrónico: ', correoError);
-            }
-          );
-          // Actualizar la lista de actividades después de agregar la subactividad
-          this.loadProject(this.idProject);
-        } else {
-          console.error('Error al añadir subactividad.');
-        }
-      },
-      (error) => {
-        console.error('Error en la solicitud para añadir subactividad: ', error);
+    // Asegúrate de que this.projectData.activities esté inicializado antes de usarlo.
+    if (!this.projectData.activities) {
+      this.projectData.activities = [];
+    }
+  
+    // Agregar la nueva actividad al arreglo de actividades
+    this.projectData.activities.push({
+      title: this.nuevaActividad.title,
+      encargadoId: this.nuevaActividad.encargadoId,
+      recursoId: this.nuevaActividad.recursoId,
+      inicio: this.nuevaActividad.inicio,
+      fin: this.nuevaActividad.fin
+      // Añade otras propiedades según sea necesario
+    });
+  
+    // Resetear el formulario
+    this.nuevaActividad = {
+      title: '',
+      encargadoId: null,
+      recursoId: null,
+      inicio: '',
+      fin: ''
+    };
+  
+    // Guardar la nueva actividad en el backend utilizando tu servicio de API
+    this.apiService.addActivity(this.nuevaActividad).subscribe(response => {
+      if (response.success) {
+        console.log('¡Actividad añadida exitosamente!');
+      } else {
+        console.error('Error al añadir actividad:', response.error);
       }
-    );
+    });
   }
-    
-=======
-     
->>>>>>> Stashed changes
+  
+
+  /*addNewActivity() {
+    // Validar que los campos requeridos estén completos antes de agregar la actividad
+    if (!this.newActivity.title || !this.newActivity.encargadoId || !this.newActivity.recursoId || !this.newActivity.inicio || !this.newActivity.fin) {
+      console.log('Por favor, complete todos los campos antes de guardar.');
+      return;
+    }
+
+    // Agregar la nueva actividad al arreglo de actividades
+    this.projectData.activities.push({
+      title: this.newActivity.title,
+      encargadoId: this.newActivity.encargadoId,
+      recursoId: this.newActivity.recursoId,
+      inicio: this.newActivity.inicio,
+      fin: this.newActivity.fin
+      // Añade otras propiedades según sea necesario
+    });
+
+    // Resetear el formulario
+    this.newActivity = {
+      title: '',
+      encargadoId: null,
+      recursoId: null,
+      inicio: '',
+      fin: ''
+    };
+
+    // Guardar la nueva actividad en el backend utilizando tu servicio de API
+    this.apiService.addActivity(this.newActivity).subscribe(response => {
+      if (response.success) {
+        console.log('¡Actividad añadida exitosamente!');
+      } else {
+        console.error('Error al añadir actividad:', response.error);
+      }
+    });
+  }*/
 }
+
+
