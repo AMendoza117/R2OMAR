@@ -20,6 +20,15 @@ if (mysqli_query($con, $consulta)) {
     echo json_encode(['success' => false, 'error' => mysqli_error($con)]);
 }
 
+//Registrar Subactividad
+
+$consul= "INSERT INTO suvactivity (nameSub, idActivity) VALUES ('$nameSub','$idActivity')";
+if (mysqli_query($con, $consul)) {
+    echo json_encode(['success' => true]);
+} else {
+    echo json_encode(['success' => false, 'error' => mysqli_error($con)]);
+}
+
 $con->close();
 
 ?>

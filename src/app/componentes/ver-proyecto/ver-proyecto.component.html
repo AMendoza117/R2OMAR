@@ -5,11 +5,11 @@
         <form (submit)="addNewActivity()">
           <div class="form-group">
             <label for="title" class="form-label">Actividad</label>
-            <input type="text" name="title" class="form-control" placeholder="titulo actividad" [(ngModel)]="newActivity.title" autofocus>
+            <input type="text" name="title" class="form-control" placeholder="titulo actividad" [(ngModel)]="newActivity.title" autofocus [ngModelOptions]="{standalone: true}">
           </div>
           <div class="form-group">
             <label for="encargado" class="form-label">Encargado</label>
-            <select id="encargado" class="form-select" [(ngModel)]="newActivity.encargadoId">
+            <select id="encargado" class="form-select" [(ngModel)]="newActivity.encargadoId" [ngModelOptions]="{standalone: true}">
               <option *ngFor="let employee of employees" [value]="employee.idEmplo">
                 {{ employee.nameEmplo }}
               </option>
@@ -17,7 +17,7 @@
           </div>
           <div class="form-group">
             <label for="recurso" class="form-label">Recurso</label>
-            <select id="recurso" class="form-select" [(ngModel)]="newActivity.recursoId">
+            <select id="recurso" class="form-select" [(ngModel)]="newActivity.recursoId" [ngModelOptions]="{standalone: true}">
               <option *ngFor="let item of item" [value]="item.idItem">
                 {{ item.nameItem }}
               </option>
@@ -25,11 +25,11 @@
           </div>
           <div class="form-group">
             <label for="inicio" class="form-label">Inicio</label>
-            <input type="date" id="inicio" [(ngModel)]="newActivity.inicio">
+            <input type="date" id="inicio" [(ngModel)]="newActivity.inicio" [ngModelOptions]="{standalone: true}">
           </div>
           <div class="form-group">
             <label for="fin" class="form-label">Final</label>
-            <input type="date" id="fin" [(ngModel)]="newActivity.fin">
+            <input type="date" id="fin" [(ngModel)]="newActivity.fin" [ngModelOptions]="{standalone: true}">
           </div>
           <input type="submit" class="btn btn-outline-success" style="margin-left: 100px; margin-top: 5px;" value="Guardar">
         </form>
@@ -53,7 +53,7 @@
           <tr *ngFor="let activity of activities">
             <td>{{ activity.title }}</td>
             <td>{{ activity.subactividad }}</td>
-            <td>{{ activity.correo }}</td>\
+            <td>{{ activity.correo }}</td>
             <td>{{ activity.inicio | date:'dd-MM-yyyy' }}</td>
             <td>{{ activity.fin | date:'dd-MM-yyyy' }}</td>
             <td><a href="subact">Agregar Subactividad</a></td>

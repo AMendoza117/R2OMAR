@@ -8,6 +8,7 @@ import { Responsible } from './interface/responsible.model';
 import { ProjectData } from './interface/projectData';
 import { Item } from './interface/item.model';
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -84,5 +85,11 @@ export class ApiService {
     const url = `${this.apiUrl}/api/regsitrarActividad.php`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(url, activityData, { headers });
+  }
+
+  addSubactivity(subactivyData:any): Observable<any>{
+    const url = `${this.apiUrl}/api/regsitrarActividad.php`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(url, subactivyData, { headers });
   }
 }

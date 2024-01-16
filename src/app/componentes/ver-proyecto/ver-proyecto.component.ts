@@ -53,9 +53,17 @@ export class VerProyectoComponent implements OnInit {
     );
   }
 
-  loadEmployees() {
+  /*loadEmployees() {
     this.employees = this.projectData.employee;
+  }*/
+  loadEmployees() {
+    if (this.projectData && this.projectData.employee) {
+      this.employees = this.projectData.employee;
+    } else {
+      this.employees = [];
+    }
   }
+  
 
   loadProject(idProject: number){
     this.apiService.getProjectData(idProject).subscribe(
@@ -82,6 +90,48 @@ export class VerProyectoComponent implements OnInit {
   }
 
   addNewActivity() {
+    // Validar que los campos requeridos estén completos antes de agregar la actividad
+    if (!this.newActivity.title || !this.newActivity.encargadoId || !this.newActivity.recursoId || !this.newActivity.inicio || !this.newActivity.fin) {
+      console.log('Por favor, complete todos los campos antes de guardar.');
+      return;
+    }
+  
+    // Asegúrate de que this.projectData.activities esté inicializado antes de usarlo.
+    if (!this.projectData.activities) {
+      this.projectData.activities = [];
+    }
+  
+    // Agregar la nueva actividad al arreglo de actividades
+    this.projectData.activities.push({
+      title: this.newActivity.title,
+      encargadoId: this.newActivity.encargadoId,
+      recursoId: this.newActivity.recursoId,
+      inicio: this.newActivity.inicio,
+      fin: this.newActivity.fin
+      // Añade otras propiedades según sea necesario
+    });
+  
+    // Resetear el formulario
+    this.newActivity = {
+      title: '',
+      encargadoId: null,
+      recursoId: null,
+      inicio: '',
+      fin: ''
+    };
+  
+    // Guardar la nueva actividad en el backend utilizando tu servicio de API
+    this.apiService.addActivity(this.newActivity).subscribe(response => {
+      if (response.success) {
+        console.log('¡Actividad añadida exitosamente!');
+      } else {
+        console.error('Error al añadir actividad:', response.error);
+      }
+    });
+  }
+  
+
+  /*addNewActivity() {
     // Validar que los campos requeridos estén completos antes de agregar la actividad
     if (!this.newActivity.title || !this.newActivity.encargadoId || !this.newActivity.recursoId || !this.newActivity.inicio || !this.newActivity.fin) {
       console.log('Por favor, complete todos los campos antes de guardar.');
@@ -115,5 +165,7 @@ export class VerProyectoComponent implements OnInit {
         console.error('Error al añadir actividad:', response.error);
       }
     });
-  }
+  }*/
 }
+
+
