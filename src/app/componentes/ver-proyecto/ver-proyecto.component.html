@@ -2,14 +2,14 @@
   <div class="row">
     <div class="col-md-4">
       <div class="card card-body">
-        <form (submit)="addNewActivity()">
+        <form (ngSubmit)="agregarActividad()" #actividadForm="ngForm">
           <div class="form-group">
             <label for="title" class="form-label">Actividad</label>
-            <input type="text" name="title" class="form-control" placeholder="titulo actividad" [(ngModel)]="newActivity.title" autofocus>
+            <input type="text" name="title" class="form-control" placeholder="titulo actividad" [(ngModel)]="nuevaActividad.nameAct" autofocus required>
           </div>
           <div class="form-group">
             <label for="encargado" class="form-label">Encargado</label>
-            <select id="encargado" class="form-select" [(ngModel)]="newActivity.encargadoId">
+            <select id="encargado" name="encargado" class="form-select" [(ngModel)]="nuevaActividad.responsible" required>
               <option *ngFor="let employee of employees" [value]="employee.idEmplo">
                 {{ employee.nameEmplo }}
               </option>
@@ -17,7 +17,7 @@
           </div>
           <div class="form-group">
             <label for="recurso" class="form-label">Recurso</label>
-            <select id="recurso" class="form-select" [(ngModel)]="newActivity.recursoId">
+            <select id="recurso" name="recurso" class="form-select" [(ngModel)]="nuevaActividad.item" required>
               <option *ngFor="let item of item" [value]="item.idItem">
                 {{ item.nameItem }}
               </option>
@@ -25,13 +25,13 @@
           </div>
           <div class="form-group">
             <label for="inicio" class="form-label">Inicio</label>
-            <input type="date" id="inicio" [(ngModel)]="newActivity.inicio">
+            <input type="date" id="inicio" name="inicio" [(ngModel)]="nuevaActividad.initialDate" required>
           </div>
           <div class="form-group">
             <label for="fin" class="form-label">Final</label>
-            <input type="date" id="fin" [(ngModel)]="newActivity.fin">
+            <input type="date" id="fin" name="fin" [(ngModel)]="nuevaActividad.finisDate" required>
           </div>
-          <input type="submit" class="btn btn-outline-success" style="margin-left: 100px; margin-top: 5px;" value="Guardar">
+          <button type="submit" class="btn btn-outline-success" style="margin-left: 100px; margin-top: 5px;">Guardar</button>
         </form>
       </div>
     </div>
@@ -40,20 +40,14 @@
         <thead>
           <tr>
             <th scope="col">Actividad</th>
-            <th scope="col">Encargado</th>
-            <th scope="col">Subactividad</th>
-            <th scope="col">Correo</th>
-            <th scope="col">Recursos</th>
             <th scope="col">Inicio</th>
             <th scope="col">Fin</th>
             <th></th>
           </tr>
         </thead>
         <tbody class="table-group-divider">
-          <tr *ngFor="let activity of activities">
+          <tr *ngFor="let activity of projectData.activities">
             <td>{{ activity.title }}</td>
-            <td>{{ activity.subactividad }}</td>
-            <td>{{ activity.correo }}</td>\
             <td>{{ activity.inicio | date:'dd-MM-yyyy' }}</td>
             <td>{{ activity.fin | date:'dd-MM-yyyy' }}</td>
             <td><a href="subact">Agregar Subactividad</a></td>

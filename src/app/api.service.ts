@@ -7,6 +7,7 @@ import { Project } from './interface/project.model';
 import { Responsible } from './interface/responsible.model';
 import { ProjectData } from './interface/projectData';
 import { Item } from './interface/item.model';
+import { Activity } from './interface/activity.model';
 
 @Injectable({
   providedIn: 'root',
@@ -80,9 +81,25 @@ export class ApiService {
     return this.http.get<Item[]>(url, { headers });
   }
 
-  addActivity(activityData: any): Observable<any> {
+  addActivity3(activityData: any): Observable<any> {
     const url = `${this.apiUrl}/api/regsitrarActividad.php`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(url, activityData, { headers });
+  }
+
+  addActivity(idProyecto: number, actividad: Activity): Observable<any> {
+    const url = `${this.apiUrl}/api/registrarActividad.php`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    const data = {
+      idProyecto: idProyecto,
+      nombreCompleto: actividad.nameAct,
+      encargado: actividad.responsible,
+      recurso: actividad.item,
+      inicio: actividad.initialDate,
+      fin: actividad.finisDate
+    };
+
+    return this.http.post(url, data, { headers });
   }
 }

@@ -3,7 +3,8 @@ export interface Activity {
     nameAct: string;
     initialDate: string;
     finisDate: string;
-    responsible: string;
+    responsible: number;
     idProject: number;
+    item: number;
   }
   

@@ -1,11 +1,11 @@
-import { Employee } from './../../interface/employee.model';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
 import { Responsible } from 'src/app/interface/responsible.model';
 import { ProjectData } from 'src/app/interface/projectData';
 import { Item } from 'src/app/interface/item.model';
 import { Activity } from 'src/app/interface/activity.model';
+import { Employee } from 'src/app/interface/employee.model';
 
 @Component({
   selector: 'app-ver-proyecto',
@@ -19,16 +19,18 @@ export class VerProyectoComponent implements OnInit {
   item: Item[];
   idProject: number;
   selectedEmployee: number; 
-  newActivity: any = {
-    title: '',
-    encargadoId: null,
-    recursoId: null,
-    inicio: '',
-    fin: ''
-  };
-  activities: Activity;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) { }
+  nuevaActividad: Activity = {
+    idActivity: null,
+    nameAct: '',
+    initialDate: '',
+    finisDate: '',
+    responsible: null,
+    idProject: null,
+    item: null
+  };
+
+  constructor(private route: ActivatedRoute, private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -54,7 +56,9 @@ export class VerProyectoComponent implements OnInit {
   }
 
   loadEmployees() {
-    this.employees = this.projectData.employee;
+    if (this.projectData && this.projectData.employee) {
+      this.employees = this.projectData.employee;
+    }
   }
 
   loadProject(idProject: number){
@@ -81,39 +85,36 @@ export class VerProyectoComponent implements OnInit {
     );
   }
 
-  addNewActivity() {
-    // Validar que los campos requeridos estén completos antes de agregar la actividad
-    if (!this.newActivity.title || !this.newActivity.encargadoId || !this.newActivity.recursoId || !this.newActivity.inicio || !this.newActivity.fin) {
-      console.log('Por favor, complete todos los campos antes de guardar.');
-      return;
-    }
-
-    // Agregar la nueva actividad al arreglo de actividades
-    this.projectData.activities.push({
-      title: this.newActivity.title,
-      encargadoId: this.newActivity.encargadoId,
-      recursoId: this.newActivity.recursoId,
-      inicio: this.newActivity.inicio,
-      fin: this.newActivity.fin
-      // Añade otras propiedades según sea necesario
-    });
-
-    // Resetear el formulario
-    this.newActivity = {
-      title: '',
-      encargadoId: null,
-      recursoId: null,
-      inicio: '',
-      fin: ''
-    };
-
-    // Guardar la nueva actividad en el backend utilizando tu servicio de API
-    this.apiService.addActivity(this.newActivity).subscribe(response => {
-      if (response.success) {
-        console.log('¡Actividad añadida exitosamente!');
-      } else {
-        console.error('Error al añadir actividad:', response.error);
+  agregarActividad() {
+    // Obtener el ID del proyecto desde la ruta
+    const idProyecto = this.idProject;
+    // Agregar el nuevo stakeholder al proyecto
+    this.apiService.addActivity(idProyecto, this.nuevaActividad).subscribe(
+      (response) => {
+        if (response && response.success) {
+          // Enviar el correo electrónico después de agregar el stakeholder
+        /*  this.apiService.enviarCorreo().subscribe(
+            (correoResponse) => {
+              if (correoResponse && correoResponse.success) {
+                console.log('Correo electrónico enviado con éxito.');
+              } else {
+                console.error('Error al enviar el correo electrónico.');
+              }
+            },
+            (correoError) => {
+              console.error('Error en la solicitud para enviar el correo electrónico: ', correoError);
+            }
+          );*/
+          this.loadProject(this.idProject);
+        } else {
+          console.error('Error al agregar stakeholder.');
+        }
+      },
+      (error) => {
+        console.error('Error en la solicitud para agregar stakeholder: ', error);
       }
-    });
+    );
   }
+  
+    
 }
